@@ -66,18 +66,12 @@ connection {
 provisioner "remote-exec" {
     inline = [
 "sudo yum update -y",
-"curl -sL https://rpm.nodesource.com/setup_16.x | bash -",
-"sudo yum install -y nodejs",
-"node -v ",
-"sudo npm install --global yarn",
 "sudo yum install fontconfig freetype libX11 libXext libXrender libjpeg  libpng xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 -y",
 "sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.amazonlinux2.x86_64.rpm",
 "sudo rpm -i wkhtmltox-0.12.6-1.amazonlinux2.x86_64.rpm",
 "sudo yum install git -y",
 "git clone https://github.com/AquilaCMS/AquilaCMS.git",
 "cd AquilaCMS",
-"yarn install",
-"npm start",
 
     ]
 
