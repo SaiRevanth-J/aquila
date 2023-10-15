@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -8,12 +9,18 @@ pipeline {
                 git 'https://github.com/SaiRevanth-J/aquila.git'
             }
         }
-        stage('deploy') {
+        stage('test') {
             steps {
             
                sh 'terraform init'
                 sh 'terraform validate'
                 sh 'terraform plan'
+            }
+        }
+        stage('deploy') {
+            steps {
+            
+               sh 'terraform apply -auto-approve'
             }
         }
     }
