@@ -42,7 +42,7 @@ resource "aws_instance" "loginserver" {
 }
 
  resource "aws_instance" "app-server" {
-    ami= data.aws_ami.ec2_latest.id
+    ami= data.aws_ami.ubuntu_latest.id
     instance_type= "t2.medium"
     subnet_id = aws_subnet.private_app_01.id
     key_name = "newkey1234"
@@ -58,20 +58,26 @@ connection {
     bastion_host_key = file("./newkey1234.pem")
     host     = self.private_ip
     type     = "ssh"
-    user     = "ec2-user"
+    user     = "ubuntu"
     private_key = file("./newkey1234.pem")
    
   }
 
 provisioner "remote-exec" {
     inline = [
-"sudo yum update -y",
-"sudo yum install fontconfig freetype libX11 libXext libXrender libjpeg  libpng xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 -y",
-"sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.amazonlinux2.x86_64.rpm",
-"sudo rpm -i wkhtmltox-0.12.6-1.amazonlinux2.x86_64.rpm",
-"sudo yum install git -y",
+"sudo apt update -y",
+"sudo wget https://nodejs.org/dist/v18.18.2/node-v18.18.2-linux-x64.tar.xz",
+"sudo tar -xvf node-v18.18.2-linux-x64.tar.xz",
+"sudo echo 'PATH=$PATH:/home/ubuntu/node-v18.18.2-linux-x64/bin' >> ~/.bashrc",
+"sleep 5",
+"source  ~/.bashrc",
+"npm install --global yarn",
+"sudo apt install -y g++ gcc libgcc libstdc++ linux-headers make python libtool automake autoconf nasm wkhtmltopdf vips vips-dev libjpeg-turbo libjpeg-turbo-dev -y",
+"sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb",
+"sudo dpkg -i wkhtmltox_0.12.6.1-2.jammy_amd64.deb",
+"sudo apt --fix-broken install -y ",
+"sudo apt install -y git",
 "git clone https://github.com/AquilaCMS/AquilaCMS.git",
-"cd AquilaCMS",
 
     ]
 
